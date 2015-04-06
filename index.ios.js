@@ -7,17 +7,14 @@ var {
   View,
 } = React;
 var styles = require('./stylesheet');
+var MOCKED_MOVIES_DATA = require('./movies');
 
 var AwesomeProject = React.createClass({
   render: function() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Hello world
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js{'\n'}
-          Press Cmd+R to reload
+        <Text style={styles.title}>
+        {MOCKED_MOVIES_DATA[0].title}
         </Text>
       </View>
     );
