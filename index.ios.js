@@ -8,7 +8,6 @@ var {
     Image
 } = React;
 var styles = require('./stylesheet');
-var MOCKED_MOVIES_DATA = require('./movies');
 
 var AwesomeProject = React.createClass({
     getInitialState: function() {
@@ -17,18 +16,44 @@ var AwesomeProject = React.createClass({
         }
     },
     render: function() {
+        if (!this.state.movies) {
+            return this.renderLoadingView();
+        }
+        return this.renderMovie(this.state.movies[0]);
+    },
+    renderMovie: function(movie) {
         return (
             <View style={styles.container}>
-                <Image source={{uri: this.state.movies.posters.thumbnail}} style={styles.thumbnail}/>
+                <Image
+                    source={{uri: movie.posters.thumbnail}}
+                    style={styles.thumbnail}
+                />
                 <View style={styles.rightContainer}>
-                    <Text style={styles.title}>{this.state.movies.title}</Text>
-                    <Text style={styles.year}>{this.state.movies.year}</Text>
+                    <Text style={styles.title}>{movie.title}</Text>
+                    <Text style={styles.year}>{movie.year}</Text>
                 </View>
             </View>
         );
     },
-    componentWillMount: function() {
-        this.setState({movies: MOCKED_MOVIES_DATA[0]});
+    renderLoadingView: function() {
+        return (
+            <View style={styles.container}>
+                <Text>
+                    Loading movies...
+                </Text>
+            </View>
+        );
+    },
+    componentDidMount: function() {
+        var REQUEST_URL = 'https://raw.githubusercontent.com/facebook/react-native/master/docs/MoviesExample.json';
+        fetch(REQUEST_URL)
+            .then((response) => response.json())
+            .then((responseData) => {
+                this.setState({
+                    movies: responseData.movies
+                });
+            })
+            .done();
     }
 });
 
