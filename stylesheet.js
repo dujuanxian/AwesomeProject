@@ -10,5 +10,9 @@ module.exports = StyleSheet.create({
     title: {
         textAlign: 'center',
         color: '#333333'
+    },
+    thumbnail: {
+        width: 53,
+        height: 81
     }
 });
