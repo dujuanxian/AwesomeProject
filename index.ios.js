@@ -5,21 +5,31 @@ var {
     AppRegistry,
     Text,
     View,
-    Image
+    Image,
+    ListView
 } = React;
 var styles = require('./stylesheet');
 
 var AwesomeProject = React.createClass({
     getInitialState: function() {
         return {
-            movies: null
+            dataSource: new ListView.DataSource({
+                rowHasChanged: (row1, row2) => row1 !== row2
+            }),
+            loaded: false
         }
     },
     render: function() {
-        if (!this.state.movies) {
+        if (!this.state.loaded) {
             return this.renderLoadingView();
         }
-        return this.renderMovie(this.state.movies[0]);
+        return (
+            <ListView
+                dataSource={this.state.dataSource}
+                renderRow={this.renderMovie}
+                style={styles.listView}
+            />
+        )
     },
     renderMovie: function(movie) {
         return (
@@ -50,7 +60,8 @@ var AwesomeProject = React.createClass({
             .then((response) => response.json())
             .then((responseData) => {
                 this.setState({
-                    movies: responseData.movies
+                    dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
+                    loaded: true
                 });
             })
             .done();

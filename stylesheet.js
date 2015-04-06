@@ -22,5 +22,9 @@ module.exports = StyleSheet.create({
     },
     rightContainer: {
         flex: 1
+    },
+    listView: {
+        paddingTop: 20,
+        backgroundColor: '#F5FCFF'
     }
 });
